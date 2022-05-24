@@ -1,7 +1,7 @@
 # 
 
 Live site link []().
-API Link 
+API Link https://cryptic-lowlands-52790.herokuapp.com/
 
 
 ### Description
@@ -19,7 +19,7 @@ This website is
 
 ### API Doc ```Name (Route) [ Method ]```
  - Home ("/") [ GET ]
- - Login ("/login") [ POST ]
+ - Login (```"/login"```) [ POST ]
  - Register ("/Register") [ POST ]
  - Add Item ("```/inventory```") [ POST ]
  - Update Stock ("/invventory") [ PUT ]
