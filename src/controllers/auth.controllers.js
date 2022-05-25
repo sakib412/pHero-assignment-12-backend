@@ -38,3 +38,16 @@ export const signupController = async (req, res) => {
         return res.status(500).json(errorResponse(err.message));
     }
 }
+
+export const getMeController = async (req, res) => {
+    try {
+        const { email } = req.decoded;
+        const user = await User.findOne({ email }).exec();
+        if (!user) {
+            return res.status(401).json(errorResponse("Please login again"))
+        }
+        return res.json(successResponse(user))
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
+}

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.signupController = exports.loginController = void 0;
+exports.signupController = exports.loginController = exports.getMeController = void 0;
 
 var _jsonwebtoken = require("jsonwebtoken");
 
@@ -95,3 +95,24 @@ const signupController = async (req, res) => {
 };
 
 exports.signupController = signupController;
+
+const getMeController = async (req, res) => {
+  try {
+    const {
+      email
+    } = req.decoded;
+    const user = await _User.default.findOne({
+      email
+    }).exec();
+
+    if (!user) {
+      return res.status(401).json((0, _response.errorResponse)("Please login again"));
+    }
+
+    return res.json((0, _response.successResponse)(user));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.getMeController = getMeController;
