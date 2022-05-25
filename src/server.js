@@ -9,6 +9,8 @@ import errorHandler from './middleware/errorHandler';
 import { successResponse } from './utils/response';
 import { connect } from './utils/db';
 import authRouter from './routes/auth.router';
+import verifyJWT from './middleware/verifyJWT';
+import reviewRouter from './routes/review.router';
 
 export const app = express();
 
@@ -24,6 +26,10 @@ app.get('/', (req, res) => {
     res.json(successResponse({ "message": "Server is running" }));
 })
 app.use('/', authRouter)
+
+// Protected routes
+app.use(verifyJWT)
+app.use('/review', reviewRouter)
 
 // handle errors
 app.use(errorHandler)

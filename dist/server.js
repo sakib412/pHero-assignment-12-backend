@@ -25,6 +25,10 @@ var _db = require("./utils/db");
 
 var _auth = _interopRequireDefault(require("./routes/auth.router"));
 
+var _verifyJWT = _interopRequireDefault(require("./middleware/verifyJWT"));
+
+var _review = _interopRequireDefault(require("./routes/review.router"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const app = (0, _express.default)(); // Middleware
@@ -43,7 +47,10 @@ app.get('/', (req, res) => {
     "message": "Server is running"
   }));
 });
-app.use('/', _auth.default); // handle errors
+app.use('/', _auth.default); // Protected routes
+
+app.use(_verifyJWT.default);
+app.use('/review', _review.default); // handle errors
 
 app.use(_errorHandler.default);
 
