@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.signupController = exports.loginController = exports.getMeController = void 0;
+exports.updateUserController = exports.signupController = exports.loginController = exports.getMeController = void 0;
 
 var _jsonwebtoken = require("jsonwebtoken");
 
@@ -116,3 +116,41 @@ const getMeController = async (req, res) => {
 };
 
 exports.getMeController = getMeController;
+
+const updateUserController = async (req, res) => {
+  try {
+    const {
+      email
+    } = req.decoded;
+    const {
+      name,
+      image,
+      education,
+      address,
+      phone,
+      linkedInProfile
+    } = req.body;
+    const user = await _User.default.findOneAndUpdate({
+      email
+    }, {
+      name,
+      image,
+      education,
+      address,
+      phone,
+      linkedInProfile
+    }, {
+      new: true
+    });
+
+    if (!user) {
+      return res.status(401).json((0, _response.errorResponse)("Please login again"));
+    }
+
+    return res.json((0, _response.successResponse)(user));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.updateUserController = updateUserController;

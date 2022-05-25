@@ -16,6 +16,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const authRouter = (0, _express.Router)();
 authRouter.post("/signup", _auth.signupController);
 authRouter.post("/login", _auth.loginController);
-authRouter.get("/me", _verifyJWT.default, _auth.getMeController);
+authRouter.route("/me").get(_verifyJWT.default, _auth.getMeController).put(_verifyJWT.default, _auth.updateUserController);
 var _default = authRouter;
 exports.default = _default;

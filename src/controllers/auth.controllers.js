@@ -51,3 +51,21 @@ export const getMeController = async (req, res) => {
         return res.status(500).json(errorResponse(err.message));
     }
 }
+
+export const updateUserController = async (req, res) => {
+    try {
+        const { email } = req.decoded;
+        const { name, image, education, address, phone, linkedInProfile } = req.body;
+        const user = await User.findOneAndUpdate({ email },
+            { name, image, education, address, phone, linkedInProfile },
+            { new: true }
+        );
+        if (!user) {
+            return res.status(401).json(errorResponse("Please login again"))
+        }
+        return res.json(successResponse(user))
+
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
+}
