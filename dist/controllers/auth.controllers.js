@@ -17,17 +17,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Login route
 const loginController = async (req, res) => {
-  const {
-    email
-  } = req.body;
-  const access = (0, _jsonwebtoken.sign)({
-    email
-  }, _config.default.secrets.jwt, {
-    expiresIn: _config.default.secrets.jwtExp
-  });
-  return res.json((0, _response.successResponse)({
-    accessToken: access
-  }));
+  try {
+    const {
+      email
+    } = req.body;
+    const access = (0, _jsonwebtoken.sign)({
+      email
+    }, _config.default.secrets.jwt, {
+      expiresIn: _config.default.secrets.jwtExp
+    });
+    return res.json((0, _response.successResponse)({
+      accessToken: access
+    }));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
 }; // Signup 
 
 
@@ -38,15 +42,45 @@ const signupController = async (req, res) => {
     const {
       name,
       email,
-      image
+      image,
+      method
     } = req.body;
     const userData = {
       name,
       email,
       image
     };
+    const user = await _User.default.findOneAndUpdate({
+      email
+    }, {
+      name,
+      image
+    }, {
+      new: true
+    }); // if user signup by google , no need to send error
+
+    if (user && method == 'google') {
+      const access = (0, _jsonwebtoken.sign)({
+        email: user.email
+      }, _config.default.secrets.jwt, {
+        expiresIn: _config.default.secrets.jwtExp
+      });
+      return res.status(200).json((0, _response.successResponse)({
+        user,
+        accessToken: access
+      }));
+    }
+
     const data = await _User.default.create(userData);
-    return res.status(201).json((0, _response.successResponse)(data));
+    const access = (0, _jsonwebtoken.sign)({
+      email: data.email
+    }, _config.default.secrets.jwt, {
+      expiresIn: _config.default.secrets.jwtExp
+    });
+    return res.status(201).json((0, _response.successResponse)({
+      user: data,
+      accessToken: access
+    }));
   } catch (err) {
     return res.status(500).json((0, _response.errorResponse)(err.message));
   }
