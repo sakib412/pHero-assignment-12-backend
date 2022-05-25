@@ -26,7 +26,6 @@ const loginController = async (req, res) => {
     const user = await _User.default.findOneAndUpdate({
       email
     }, {
-      email,
       name,
       image
     }, {
