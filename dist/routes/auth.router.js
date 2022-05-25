@@ -10,6 +10,6 @@ var _express = require("express");
 var _auth = require("../controllers/auth.controllers");
 
 const authRouter = (0, _express.Router)();
-authRouter.route("/login").post(_auth.loginController);
+authRouter.route("/signup").post(_auth.signupController);
 var _default = authRouter;
 exports.default = _default;

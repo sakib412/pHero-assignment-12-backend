@@ -23,7 +23,7 @@ app.use(morgan('dev'))
 app.get('/', (req, res) => {
     res.json(successResponse({ "message": "Server is running" }));
 })
-// app.use('/', authRouter)
+app.use('/', authRouter)
 
 // handle errors
 app.use(errorHandler)

@@ -42,8 +42,8 @@ app.get('/', (req, res) => {
   res.json((0, _response.successResponse)({
     "message": "Server is running"
   }));
-}); // app.use('/', authRouter)
-// handle errors
+});
+app.use('/', _auth.default); // handle errors
 
 app.use(_errorHandler.default);
 

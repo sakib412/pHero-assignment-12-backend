@@ -1,6 +1,7 @@
 import { sign } from "jsonwebtoken";
 import config from "../config";
-import { successResponse } from "../utils/response";
+import User from "../models/User";
+import { errorResponse, successResponse } from "../utils/response";
 
 // Login route
 export const loginController = async (req, res) => {
@@ -9,4 +10,16 @@ export const loginController = async (req, res) => {
         expiresIn: config.secrets.jwtExp,
     });
     return res.json(successResponse({ accessToken: access }));
+}
+
+// Signup 
+export const signupController = async (req, res) => {
+    try {
+        const { name, email, image } = req.body
+        const userData = { name, email, image }
+        const data = await User.create(userData)
+        return res.status(201).json(successResponse(data))
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
 }
