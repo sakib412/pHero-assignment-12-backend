@@ -180,7 +180,7 @@ const getAllUsersControllers = async (req, res) => {
       nextPage: page >= totalPage ? null : page + 1,
       data
     };
-    return res.json((0, _response.successResponse)(results));
+    return res.status(200).json((0, _response.successResponse)(results));
   } catch (err) {
     return res.status(500).json((0, _response.errorResponse)(err.message));
   }
