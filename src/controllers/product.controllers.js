@@ -31,10 +31,18 @@ export const getAllProductsController = async (req, res) => {
             data
         }
         return res.json(successResponse(results))
-
-
     } catch (err) {
         return res.status(500).json(errorResponse(err.message));
-
     }
+}
+
+export const deleteProductController = async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id)
+        if (!product) return res.status(400).json(errorResponse("The item you are trying to delete is not found."));
+        return res.status(204).json(successResponse("Succesfully deleted."));
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
+
 }

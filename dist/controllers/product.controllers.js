@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAllProductsController = exports.addProductController = void 0;
+exports.getAllProductsController = exports.deleteProductController = exports.addProductController = void 0;
 
 var _Product = _interopRequireDefault(require("../models/Product"));
 
@@ -66,3 +66,15 @@ const getAllProductsController = async (req, res) => {
 };
 
 exports.getAllProductsController = getAllProductsController;
+
+const deleteProductController = async (req, res) => {
+  try {
+    const product = await _Product.default.findByIdAndDelete(req.params.id);
+    if (!product) return res.status(400).json((0, _response.errorResponse)("The item you are trying to delete is not found."));
+    return res.status(204).json((0, _response.successResponse)("Succesfully deleted."));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.deleteProductController = deleteProductController;

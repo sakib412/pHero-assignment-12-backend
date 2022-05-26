@@ -11,5 +11,6 @@ var _product = require("../controllers/product.controllers");
 
 const productRouter = (0, _express.Router)();
 productRouter.route('/').get(_product.getAllProductsController).post(_product.addProductController);
+productRouter.route('/:id').delete(_product.deleteProductController);
 var _default = productRouter;
 exports.default = _default;
