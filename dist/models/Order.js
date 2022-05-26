@@ -10,15 +10,19 @@ var _mongoose = require("mongoose");
 var _collectionName = require("./collectionName");
 
 const OrderSchema = new _mongoose.Schema({
-  products: [{
+  product: {
     type: _mongoose.Schema.Types.ObjectId,
-    ref: _collectionName.PRODUCT
-  }],
+    ref: _collectionName.PRODUCT,
+    required: true
+  },
   customer: {
     type: _mongoose.Schema.Types.ObjectId,
     ref: _collectionName.USER,
     required: true
   },
+  address: String,
+  phone: String,
+  note: String,
   status: {
     type: String,
     enum: ['PENDING', 'SHIPPED', 'DELIVERED'],

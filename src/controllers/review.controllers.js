@@ -19,3 +19,12 @@ export const addReview = async (req, res) => {
         return res.status(500).json(errorResponse(err));
     }
 }
+
+export const getReviewsController = async (req, res) => {
+    try {
+        const reviews = await Review.find({}).sort({ updatedAt: -1 }).populate('reviewer').exec()
+        return res.status(200).json(successResponse(reviews))
+    } catch (err) {
+        return res.status(500).json(errorResponse(err));
+    }
+}

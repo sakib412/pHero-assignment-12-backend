@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addReview = void 0;
+exports.getReviewsController = exports.addReview = void 0;
 
 var _Review = _interopRequireDefault(require("../models/Review"));
 
@@ -40,3 +40,16 @@ const addReview = async (req, res) => {
 };
 
 exports.addReview = addReview;
+
+const getReviewsController = async (req, res) => {
+  try {
+    const reviews = await _Review.default.find({}).sort({
+      updatedAt: -1
+    }).populate('reviewer').exec();
+    return res.status(200).json((0, _response.successResponse)(reviews));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err));
+  }
+};
+
+exports.getReviewsController = getReviewsController;

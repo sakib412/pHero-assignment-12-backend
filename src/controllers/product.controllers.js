@@ -19,7 +19,7 @@ export const getAllProductsController = async (req, res) => {
         size = parseInt(size)
         const query = {}
         const totalData = await Product.find().estimatedDocumentCount()
-        const data = await Product.find(query).skip((page - 1) * size).limit(size).exec()
+        const data = await Product.find(query).sort({ updatedAt: -1 }).skip((page - 1) * size).limit(size).exec()
 
         const totalPage = Math.ceil(totalData / size)
         const results = {

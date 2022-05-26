@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { addReview } from "../controllers/review.controllers";
+import { addReview, getReviewsController } from "../controllers/review.controllers";
 
 import verifyJWT from "../middleware/verifyJWT";
 
 const reviewRouter = Router()
 
 reviewRouter.route('/')
-    // .get(getItems)
+    .get(getReviewsController)
     .post(addReview)
 
 // reviewRouter.route('/:id')

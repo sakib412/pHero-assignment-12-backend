@@ -12,6 +12,7 @@ import authRouter from './routes/auth.router';
 import verifyJWT from './middleware/verifyJWT';
 import reviewRouter from './routes/review.router';
 import productRouter from './routes/product.router';
+import orderRouter from './routes/order.router';
 
 export const app = express();
 
@@ -32,6 +33,7 @@ app.use('/', authRouter)
 app.use(verifyJWT)
 app.use('/review', reviewRouter)
 app.use('/product', productRouter)
+app.use('/order', orderRouter)
 
 // handle errors
 app.use(errorHandler)
