@@ -44,5 +44,14 @@ export const deleteProductController = async (req, res) => {
     } catch (err) {
         return res.status(500).json(errorResponse(err.message));
     }
+}
 
+export const getOneProductController = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id).exec();
+        if (!product) return res.status(404).json(errorResponse("Not found"));
+        return res.json(successResponse(product));
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
 }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAllProductsController = exports.deleteProductController = exports.addProductController = void 0;
+exports.getOneProductController = exports.getAllProductsController = exports.deleteProductController = exports.addProductController = void 0;
 
 var _Product = _interopRequireDefault(require("../models/Product"));
 
@@ -78,3 +78,15 @@ const deleteProductController = async (req, res) => {
 };
 
 exports.deleteProductController = deleteProductController;
+
+const getOneProductController = async (req, res) => {
+  try {
+    const product = await _Product.default.findById(req.params.id).exec();
+    if (!product) return res.status(404).json((0, _response.errorResponse)("Not found"));
+    return res.json((0, _response.successResponse)(product));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.getOneProductController = getOneProductController;

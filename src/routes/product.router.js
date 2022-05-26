@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProductController, deleteProductController, getAllProductsController } from "../controllers/product.controllers";
+import { addProductController, deleteProductController, getAllProductsController, getOneProductController } from "../controllers/product.controllers";
 
 const productRouter = Router()
 
@@ -8,6 +8,7 @@ productRouter.route('/')
     .post(addProductController)
 
 productRouter.route('/:id')
+    .get(getOneProductController)
     .delete(deleteProductController)
 
 
