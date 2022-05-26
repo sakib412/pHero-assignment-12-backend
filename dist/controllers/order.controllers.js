@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addOrderControllers = void 0;
+exports.getAllOrdersControllers = exports.addOrderControllers = void 0;
 
 var _Order = _interopRequireDefault(require("../models/Order"));
 
@@ -46,3 +46,33 @@ const addOrderControllers = async (req, res) => {
 };
 
 exports.addOrderControllers = addOrderControllers;
+
+const getAllOrdersControllers = async (req, res) => {
+  try {
+    let {
+      page = 1,
+      size = 10
+    } = req.query;
+    page = parseInt(page);
+    size = parseInt(size);
+    const query = {};
+    const totalData = await _Order.default.find().estimatedDocumentCount();
+    const data = await _Order.default.find(query).sort({
+      updatedAt: -1
+    }).skip((page - 1) * size).limit(size).populate('product').exec();
+    const totalPage = Math.ceil(totalData / size);
+    const results = {
+      currentPage: page,
+      totalData,
+      totalPage,
+      prevPage: page <= 1 ? null : page - 1,
+      nextPage: page >= totalPage ? null : page + 1,
+      data
+    };
+    return res.json((0, _response.successResponse)(results));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.getAllOrdersControllers = getAllOrdersControllers;

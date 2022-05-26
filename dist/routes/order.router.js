@@ -14,7 +14,6 @@ var _verifyJWT = _interopRequireDefault(require("../middleware/verifyJWT"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const orderRouter = (0, _express.Router)();
-orderRouter.route('/') // .get(getordersController)
-.post(_order.addOrderControllers);
+orderRouter.route('/').get(_order.getAllOrdersControllers).post(_order.addOrderControllers);
 var _default = orderRouter;
 exports.default = _default;
