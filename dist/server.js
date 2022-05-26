@@ -29,6 +29,8 @@ var _verifyJWT = _interopRequireDefault(require("./middleware/verifyJWT"));
 
 var _review = _interopRequireDefault(require("./routes/review.router"));
 
+var _product = _interopRequireDefault(require("./routes/product.router"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const app = (0, _express.default)(); // Middleware
@@ -50,7 +52,8 @@ app.get('/', (req, res) => {
 app.use('/', _auth.default); // Protected routes
 
 app.use(_verifyJWT.default);
-app.use('/review', _review.default); // handle errors
+app.use('/review', _review.default);
+app.use('/product', _product.default); // handle errors
 
 app.use(_errorHandler.default);
 

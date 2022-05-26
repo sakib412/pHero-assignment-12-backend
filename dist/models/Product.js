@@ -15,7 +15,10 @@ const ProductSchema = new _mongoose.Schema({
     required: true
   },
   description: String,
-  image: String,
+  image: {
+    type: String,
+    required: true
+  },
   price: {
     type: Number,
     required: true
@@ -32,12 +35,7 @@ const ProductSchema = new _mongoose.Schema({
     type: _mongoose.Schema.Types.ObjectId,
     ref: _collectionName.USER,
     required: true
-  },
-  price: {
-    type: Number,
-    required: true
-  },
-  email: String
+  }
 }, {
   timestamps: true
 });

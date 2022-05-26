@@ -11,6 +11,7 @@ import { connect } from './utils/db';
 import authRouter from './routes/auth.router';
 import verifyJWT from './middleware/verifyJWT';
 import reviewRouter from './routes/review.router';
+import productRouter from './routes/product.router';
 
 export const app = express();
 
@@ -30,6 +31,7 @@ app.use('/', authRouter)
 // Protected routes
 app.use(verifyJWT)
 app.use('/review', reviewRouter)
+app.use('/product', productRouter)
 
 // handle errors
 app.use(errorHandler)

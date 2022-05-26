@@ -9,6 +9,8 @@ var _jsonwebtoken = require("jsonwebtoken");
 
 var _config = _interopRequireDefault(require("../config"));
 
+var _User = _interopRequireDefault(require("../models/User"));
+
 var _response = require("../utils/response");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -21,12 +23,16 @@ const verifyJWT = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-  (0, _jsonwebtoken.verify)(token, _config.default.secrets.jwt, (err, decoded) => {
+  (0, _jsonwebtoken.verify)(token, _config.default.secrets.jwt, async (err, decoded) => {
     if (err) {
       return res.status(403).json((0, _response.errorResponse)("Forbidden access"));
     }
 
     req.decoded = decoded;
+    const user = await _User.default.findOne({
+      email: decoded.email
+    }).exec();
+    req.user = user;
     next();
   });
 };
