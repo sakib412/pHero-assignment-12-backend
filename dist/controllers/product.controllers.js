@@ -72,7 +72,7 @@ exports.getAllProductsController = getAllProductsController;
 const deleteProductController = async (req, res) => {
   try {
     const product = await _Product.default.findByIdAndDelete(req.params.id);
-    if (!product) return res.status(400).json((0, _response.errorResponse)("The item you are trying to delete is not found."));
+    if (!product) return res.status(404).json((0, _response.errorResponse)("The item you are trying to delete is not found."));
     return res.status(204).json((0, _response.successResponse)("Succesfully deleted."));
   } catch (err) {
     return res.status(500).json((0, _response.errorResponse)(err.message));

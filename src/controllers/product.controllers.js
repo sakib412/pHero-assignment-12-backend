@@ -39,7 +39,7 @@ export const getAllProductsController = async (req, res) => {
 export const deleteProductController = async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id)
-        if (!product) return res.status(400).json(errorResponse("The item you are trying to delete is not found."));
+        if (!product) return res.status(404).json(errorResponse("The item you are trying to delete is not found."));
         return res.status(204).json(successResponse("Succesfully deleted."));
     } catch (err) {
         return res.status(500).json(errorResponse(err.message));

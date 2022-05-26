@@ -69,3 +69,45 @@ export const updateUserController = async (req, res) => {
         return res.status(500).json(errorResponse(err.message));
     }
 }
+
+
+export const getAllUsersControllers = async (req, res) => {
+    try {
+        let { page = 1, size = 10 } = req.query
+        page = parseInt(page)
+        size = parseInt(size)
+        const query = { _id: { $ne: req.user._id } }
+        const totalData = await User.find(query).countDocuments()
+        const data = await User.find(query)
+            .sort({ updatedAt: -1 })
+            .skip((page - 1) * size)
+            .limit(size).exec()
+
+        const totalPage = Math.ceil(totalData / size)
+        const results = {
+            currentPage: page,
+            totalData,
+            totalPage,
+            prevPage: page <= 1 ? null : page - 1,
+            nextPage: page >= totalPage ? null : page + 1,
+            data
+        }
+        return res.json(successResponse(results))
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
+}
+
+export const updateUserRoleController = async (req, res) => {
+    try {
+        const { role } = req.body;
+        const user = await User.findByIdAndUpdate(req.params.id,
+            { role },
+            { new: true }
+        );
+        return res.json(successResponse(user))
+
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+    }
+}

@@ -3,13 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.start = exports.app = void 0;
+exports.stripe = exports.start = exports.app = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
 var _cors = _interopRequireDefault(require("cors"));
 
 var _morgan = _interopRequireDefault(require("morgan"));
+
+var _stripe = _interopRequireDefault(require("stripe"));
 
 var _bodyParser = require("body-parser");
 
@@ -25,19 +27,23 @@ var _db = require("./utils/db");
 
 var _auth = _interopRequireDefault(require("./routes/auth.router"));
 
-var _verifyJWT = _interopRequireDefault(require("./middleware/verifyJWT"));
-
 var _review = _interopRequireDefault(require("./routes/review.router"));
 
 var _product = _interopRequireDefault(require("./routes/product.router"));
 
 var _order = _interopRequireDefault(require("./routes/order.router"));
 
+var _payment = _interopRequireDefault(require("./routes/payment.router"));
+
+var _verifyJWT = _interopRequireDefault(require("./middleware/verifyJWT"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const app = (0, _express.default)(); // Middleware
-
+const app = (0, _express.default)();
 exports.app = app;
+const stripe = new _stripe.default(process.env.STRIPE_SECRET_KEY); // Middleware
+
+exports.stripe = stripe;
 app.disable('x-powered-by');
 app.use((0, _cors.default)());
 app.use((0, _bodyParser.json)());
@@ -51,11 +57,12 @@ app.get('/', (req, res) => {
     "message": "Server is running"
   }));
 });
-app.use('/', _auth.default); // Protected routes
+app.use('/', _auth.default);
+app.use('/payment', _payment.default);
+app.use('/review', _review.default);
+app.use('/product', _product.default); // Protected route
 
 app.use(_verifyJWT.default);
-app.use('/review', _review.default);
-app.use('/product', _product.default);
 app.use('/order', _order.default); // handle errors
 
 app.use(_errorHandler.default);

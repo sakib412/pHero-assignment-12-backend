@@ -1,17 +1,18 @@
 import { Router } from "express";
-import { addProductController, deleteProductController, getAllProductsController, getOneProductController } from "../controllers/product.controllers";
+import {
+    addProductController, deleteProductController, getAllProductsController,
+    getOneProductController
+} from "../controllers/product.controllers";
+import isAdmin from "../middleware/isAdmin";
+import verifyJWT from "../middleware/verifyJWT";
 
 const productRouter = Router()
-
 productRouter.route('/')
     .get(getAllProductsController)
-    .post(addProductController)
+    .post(verifyJWT, isAdmin, addProductController)
 
 productRouter.route('/:id')
     .get(getOneProductController)
-    .delete(deleteProductController)
-
-
-
+    .delete(verifyJWT, isAdmin, deleteProductController)
 
 export default productRouter

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateUserController = exports.signupController = exports.loginController = exports.getMeController = void 0;
+exports.updateUserRoleController = exports.updateUserController = exports.signupController = exports.loginController = exports.getMeController = exports.getAllUsersControllers = void 0;
 
 var _jsonwebtoken = require("jsonwebtoken");
 
@@ -153,3 +153,55 @@ const updateUserController = async (req, res) => {
 };
 
 exports.updateUserController = updateUserController;
+
+const getAllUsersControllers = async (req, res) => {
+  try {
+    let {
+      page = 1,
+      size = 10
+    } = req.query;
+    page = parseInt(page);
+    size = parseInt(size);
+    const query = {
+      _id: {
+        $ne: req.user._id
+      }
+    };
+    const totalData = await _User.default.find(query).countDocuments();
+    const data = await _User.default.find(query).sort({
+      updatedAt: -1
+    }).skip((page - 1) * size).limit(size).exec();
+    const totalPage = Math.ceil(totalData / size);
+    const results = {
+      currentPage: page,
+      totalData,
+      totalPage,
+      prevPage: page <= 1 ? null : page - 1,
+      nextPage: page >= totalPage ? null : page + 1,
+      data
+    };
+    return res.json((0, _response.successResponse)(results));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.getAllUsersControllers = getAllUsersControllers;
+
+const updateUserRoleController = async (req, res) => {
+  try {
+    const {
+      role
+    } = req.body;
+    const user = await _User.default.findByIdAndUpdate(req.params.id, {
+      role
+    }, {
+      new: true
+    });
+    return res.json((0, _response.successResponse)(user));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.updateUserRoleController = updateUserRoleController;
