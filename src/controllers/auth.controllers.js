@@ -92,7 +92,7 @@ export const getAllUsersControllers = async (req, res) => {
             nextPage: page >= totalPage ? null : page + 1,
             data
         }
-        return res.json(successResponse(results))
+        return res.status(200).json(successResponse(results))
     } catch (err) {
         return res.status(500).json(errorResponse(err.message));
     }
