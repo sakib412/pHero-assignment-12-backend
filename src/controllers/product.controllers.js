@@ -1,5 +1,5 @@
 import Product from "../models/Product";
-import { errorResponse } from "../utils/response"
+import { errorResponse, successResponse } from "../utils/response"
 
 export const addProductController = async (req, res) => {
     try {
@@ -9,5 +9,32 @@ export const addProductController = async (req, res) => {
         return res.status(201).json(product)
     } catch (err) {
         return res.status(500).json(errorResponse(err.message));
+    }
+}
+
+export const getAllProductsController = async (req, res) => {
+    try {
+        let { page = 1, size = 10 } = req.query
+        page = parseInt(page)
+        size = parseInt(size)
+        const query = {}
+        const totalData = await Product.find().estimatedDocumentCount()
+        const data = await Product.find(query).skip((page - 1) * size).limit(size).exec()
+
+        const totalPage = Math.ceil(totalData / size)
+        const results = {
+            currentPage: page,
+            totalData,
+            totalPage,
+            prevPage: page <= 1 ? null : page - 1,
+            nextPage: page >= totalPage ? null : page + 1,
+            data
+        }
+        return res.json(successResponse(results))
+
+
+    } catch (err) {
+        return res.status(500).json(errorResponse(err.message));
+
     }
 }

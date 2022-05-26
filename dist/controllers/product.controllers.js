@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addProductController = void 0;
+exports.getAllProductsController = exports.addProductController = void 0;
 
 var _Product = _interopRequireDefault(require("../models/Product"));
 
@@ -38,3 +38,31 @@ const addProductController = async (req, res) => {
 };
 
 exports.addProductController = addProductController;
+
+const getAllProductsController = async (req, res) => {
+  try {
+    let {
+      page = 1,
+      size = 10
+    } = req.query;
+    page = parseInt(page);
+    size = parseInt(size);
+    const query = {};
+    const totalData = await _Product.default.find().estimatedDocumentCount();
+    const data = await _Product.default.find(query).skip((page - 1) * size).limit(size).exec();
+    const totalPage = Math.ceil(totalData / size);
+    const results = {
+      currentPage: page,
+      totalData,
+      totalPage,
+      prevPage: page <= 1 ? null : page - 1,
+      nextPage: page >= totalPage ? null : page + 1,
+      data
+    };
+    return res.json((0, _response.successResponse)(results));
+  } catch (err) {
+    return res.status(500).json((0, _response.errorResponse)(err.message));
+  }
+};
+
+exports.getAllProductsController = getAllProductsController;
